@@ -6,9 +6,9 @@ fun readFileLineByLineUsingBufferedReader(filename: String): List<String> {
 
 val input = readFileLineByLineUsingBufferedReader("2022\\09\\input.txt")
 
-class Node() {
+class Knot() {
     var position = Pair(0, 0)
-    var follows: Node? = null
+    var follows: Knot? = null
     val visited = mutableSetOf<Pair<Int, Int>>()
 
     fun move(direction: Char) {
@@ -58,34 +58,28 @@ class Node() {
 }
 
 
-val head = Node()
-val tail1 = Node()
-tail1.follows = head
+// Main program
+val head = Knot()
+val knots = mutableListOf<Knot>()
 
-val nodes = mutableListOf<Node>()
-nodes.add(Node())
-nodes.last().follows = head
-
-// create 7 nodes
-for (i in 1..7) {
-    val node = Node()
-    node.follows = nodes.last()
-    nodes.add(node)
+// create 9 knots
+knots.add(Knot())
+knots.first().follows = head
+for (i in 1..8) {
+    val knot = Knot()
+    knot.follows = knots.last()
+    knots.add(knot)
 }
-val tail2 = Node()
-tail2.follows = nodes.last()
 
 input.forEach { line ->
     val movement = line.split(" ")
     for (i in 0 until movement[1].toInt()) {
         head.move(movement[0][0])
-        tail1.follow()
-        for (node in nodes) {
-            node.follow()
+        for (knot in knots) {
+            knot.follow()
         }
-        tail2.follow()
     }
 }
 
-println("task 1: ${tail1.visited.size}")
-println("task 2: ${tail2.visited.size}")
+println("task 1: ${knots.first().visited.size}")
+println("task 2: ${knots.last().visited.size}")
